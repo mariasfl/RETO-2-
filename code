@@ -1,0 +1,55 @@
+classDiagram
+
+    class Usuario {
+        -str nombreUsuario
+        -str correo
+        -str contraseña
+        -List<Usuario> seguidores
+        -List<Usuario> seguidos
+        +registrarse()
+        +iniciarSesion()
+        +seguir(u: Usuario)
+        +DejarDeSeguir(u: Usuario)
+        +hacerPublicacion(descripcion: str): Publicacion
+        +comentar(p: Publicacion, texto: str): Comentario
+        +enviarDm(destino: Usuario, contenido: str): dm
+    }
+
+    class Publicacion {
+        -str descripcion
+        -date fechaHora
+        -List<Like> likes
+        -List<Comentario> comentarios
+        +editarDescripcion()
+        +eliminar()
+    }
+
+    class Comentario {
+        -str texto
+        -date fechaHora
+        +editarTexto()
+        +eliminar()
+    }
+
+    class Like {
+        -date fechaHora
+    }
+
+    class dm {
+        -date fechaHora
+        -int duracion
+        +eliminar()
+    }
+
+    %%Relaciones
+    Usuario "1" o-- "*" Publicacion : crea
+    Usuario "1" o-- "*" Historia : sube
+    Usuario "1" -- "*" dm : envia
+    Usuario "1" -- "*" Comentario : escribe
+    Usuario "1" -- "*" Like : da
+
+    Publicacion *-- "*" Comentario : tiene
+    Publicacion *-- "*" Like : recibe
+
+    Comentario "many" -- "1" Usuario : autor
+    Like "many" -- "1" Usuario : autor
